@@ -1,7 +1,7 @@
 MIT License
 
 ## MIT License for Dungeon-Framework
-For evrything that is Part of the [Dungeon-Framework](https://github.com/Programmiermethoden/Dungeon).
+For everything that is Part of the [Dungeon-Framework](https://github.com/Programmiermethoden/Dungeon).
 
 Copyright (c) 2022-2023 André Matutat, Malte Reinsch, Carsten Gips
 
