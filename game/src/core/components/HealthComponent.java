@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.Null;
 
 import core.Component;
 import core.Entity;
+import core.Game;
 import core.systems.HealthSystem;
 import core.utils.components.health.Damage;
 import core.utils.components.health.DamageType;
@@ -38,8 +39,19 @@ public final class HealthComponent implements Component {
     private int maximalHealthpoints;
     private int currentHealthpoints;
     private @Null Entity lastCause = null;
-
     private boolean godMode = false;
+
+    private static final float BLINK_FOR_SECONDS = .25f;
+
+    public static Consumer<Entity> ON_HIT_BLINK =
+            entity ->
+                    entity.fetch(DrawComponent.class)
+                            .ifPresent(
+                                    dc ->
+                                            dc.blinkForFrames(
+                                                    (int) (Game.frameRate() * BLINK_FOR_SECONDS)));
+
+    private Consumer<Entity> onHit = ON_HIT_BLINK;
 
     /**
      * Create a new HealthComponent.
@@ -186,5 +198,9 @@ public final class HealthComponent implements Component {
      */
     public void godMode(boolean status) {
         this.godMode = status;
+    }
+
+    public void triggerOnHit(Entity entity) {
+        onHit.accept(entity);
     }
 }

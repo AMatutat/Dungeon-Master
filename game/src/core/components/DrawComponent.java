@@ -57,6 +57,9 @@ public final class DrawComponent implements Component {
     private Map<IPath, Integer> animationQueue =
             new TreeMap<>(Comparator.comparingInt(IPath::priority));
 
+    private int blinkForFrames = 0;
+    private int isBlinkingSince = 0;
+
     /**
      * Create a new DrawComponent.
      *
@@ -273,6 +276,21 @@ public final class DrawComponent implements Component {
         return animationQueue;
     }
 
+    public int blinkForFrames() {
+        return blinkForFrames;
+    }
+
+    public void blinkForFrames(int blinkTimeInFrames) {
+        blinkForFrames = Math.max(0, blinkTimeInFrames);
+    }
+
+    public int isBlinkingSince() {
+        return isBlinkingSince;
+    }
+
+    public void isBlinkingSince(int timer) {
+        isBlinkingSince = timer;
+    }
     /**
      * Allows replacing the whole AnimationQueue with a new one
      *

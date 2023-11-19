@@ -21,7 +21,6 @@ import java.util.stream.Stream;
  * the death of an entity when the health-points have fallen below 0.
  */
 public final class HealthSystem extends System {
-
     public HealthSystem() {
         super(HealthComponent.class, DrawComponent.class);
     }
@@ -134,6 +133,7 @@ public final class HealthSystem extends System {
         // reset all damage objects in health component and apply damage
         hsd.hc.clearDamage();
         hsd.hc.currentHealthpoints(hsd.hc.currentHealthpoints() - dmgAmount);
+        if (dmgAmount > 0) hsd.hc.triggerOnHit(hsd.e);
     }
 
     private void removeDeadEntities(HSData hsd) {
