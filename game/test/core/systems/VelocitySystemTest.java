@@ -40,7 +40,7 @@ public class VelocitySystemTest {
 
     @Before
     public void setup() throws IOException {
-        Game.add(new LevelSystem(null, null, () -> {}));
+        Game.add(new LevelSystem(null, () -> {}));
         Game.currentLevel(level);
         Mockito.when(tile.friction()).thenReturn(0.75f);
         Mockito.when(level.tileAt((Point) Mockito.any())).thenReturn(tile);

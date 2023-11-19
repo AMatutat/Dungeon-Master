@@ -4,6 +4,7 @@ import core.Entity;
 import core.Game;
 import core.components.DrawComponent;
 import core.components.PositionComponent;
+import core.entities.EntityFactory;
 import core.level.Tile;
 import core.level.TileLevel;
 import core.level.elements.ILevel;
@@ -15,9 +16,8 @@ import core.level.generator.graphBased.levelGraph.LevelNode;
 import core.level.utils.*;
 import core.utils.IVoidFunction;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
@@ -50,6 +50,36 @@ public class RoombasedLevelGenerator {
     private static final int MIN_ENTITIES_FOR_BIG_ROOM = 5;
 
     private static final Logger LOGGER = Logger.getLogger(RoombasedLevelGenerator.class.getName());
+
+    public static ILevel level() {
+        Set<Set<Entity>> entities = new HashSet<>();
+        for (int i = 0; i < 10; i++) {
+            Set<Entity> set = new HashSet<>();
+            entities.add(set);
+            if (i == 10 / 2) {
+                try {
+                    set.add(EntityFactory.newCraftingCauldron());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            for (int j = 0; j < 5; j++) {
+                try {
+                    set.add(EntityFactory.randomMonster());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            for (int k = 0; k < 1; k++) {
+                try {
+                    set.add(EntityFactory.newChest());
+                } catch (IOException e) {
+
+                }
+            }
+        }
+        return level(entities, DesignLabel.randomDesign());
+    }
 
     /**
      * Get a room-based level with a room for each given entity-set.
@@ -86,11 +116,20 @@ public class RoombasedLevelGenerator {
                                                 roomG.layout(sizeFor(node), node.neighbours()),
                                                 designLabel)));
 
-        for (LevelNode node : graph.nodes()) {
+        List<LevelNode> removeExitFrom = new ArrayList<>(graph.nodes());
+        Random random = new Random();
+        int randomIndex = random.nextInt(removeExitFrom.size());
+        removeExitFrom.remove(randomIndex);
+        for (LevelNode node : removeExitFrom) {
             ILevel level = node.level();
             // remove trapdoor exit, in rooms we only use doors
             List<Tile> exits = new ArrayList<>(level.exitTiles());
             exits.forEach(exit -> level.changeTileElementType(exit, LevelElement.FLOOR));
+        }
+
+        // removeExitFrom.remove(randomIndex);
+        for (LevelNode node : graph.nodes()) {
+            ILevel level = node.level();
             configureDoors(node);
             node.level().onFirstLoad(() -> node.entities().forEach(Game::add));
         }

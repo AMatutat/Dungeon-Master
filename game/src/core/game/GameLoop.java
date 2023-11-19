@@ -16,8 +16,6 @@ import core.Entity;
 import core.Game;
 import core.System;
 import core.components.PositionComponent;
-import core.level.generator.postGeneration.WallGenerator;
-import core.level.generator.randomwalk.RandomWalkGenerator;
 import core.systems.*;
 import core.utils.Constants;
 import core.utils.IVoidFunction;
@@ -37,11 +35,6 @@ public class GameLoop extends ScreenAdapter {
     /**
      * Sets {@link Game#currentLevel} to the new level and changes the currently active entity
      * storage.
-     *
-     * <p>Will remove all Systems using {@link ECSManagment#removeAllSystems()} from the Game. This
-     * will trigger {@link System#onEntityRemove} for the old level. Then, it will readd all Systems
-     * using {@link ECSManagment#add(System)}, triggering {@link System#onEntityAdd} for the new
-     * level.
      *
      * <p>Will re-add the hero if they exist.
      */
@@ -237,11 +230,7 @@ public class GameLoop extends ScreenAdapter {
     private void createSystems() {
         ECSManagment.add(new PositionSystem());
         ECSManagment.add(new CameraSystem());
-        ECSManagment.add(
-                new LevelSystem(
-                        DrawSystem.painter(),
-                        new WallGenerator(new RandomWalkGenerator()),
-                        onLevelLoad));
+        ECSManagment.add(new LevelSystem(DrawSystem.painter(), onLevelLoad));
         ECSManagment.add(new DrawSystem());
         ECSManagment.add(new VelocitySystem());
         ECSManagment.add(new PlayerSystem());

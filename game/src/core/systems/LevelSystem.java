@@ -11,8 +11,7 @@ import core.components.PositionComponent;
 import core.level.Tile;
 import core.level.elements.ILevel;
 import core.level.elements.tile.DoorTile;
-import core.level.generator.IGenerator;
-import core.level.utils.DesignLabel;
+import core.level.generator.graphBased.RoombasedLevelGenerator;
 import core.level.utils.LevelElement;
 import core.level.utils.LevelSize;
 import core.utils.IVoidFunction;
@@ -23,16 +22,11 @@ import core.utils.components.draw.PainterConfig;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 /**
  * Manages the dungeon game world.
  *
  * <p>The system will store the currently active level.
- *
- * <p>The system uses the configured {@link IGenerator} to generate levels in the configured {@link
- * LevelSize}. Use {@link #generator(IGenerator)} to change the used level generator. Use {@link
- * #levelSize(LevelSize)} to set the size of the next levels that get loaded.
  *
  * <p>Each frame, this system will draw the level on the screen. The system will also check if one
  * of the entities managed by this system is positioned on the end tile of the level. If so, the
@@ -43,11 +37,6 @@ import java.util.logging.Logger;
  *
  * <p>An entity needs a {@link PositionComponent} and a {@link PlayerComponent} to be managed by
  * this system.
- *
- * <p>Use {@link #level()} to get the currently active level. Use {@link #loadLevel(ILevel)}, {@link
- * #loadLevel(LevelSize, DesignLabel)}, {@link #loadLevel(LevelSize)}, or {@link
- * #loadLevel(DesignLabel)} to trigger a level load manually. These methods will also trigger the
- * onLevelLoad callback.
  */
 public final class LevelSystem extends System {
     /** offset the coordinate by half a tile, it makes every Entity not walk on the sidewalls */
@@ -71,23 +60,18 @@ public final class LevelSystem extends System {
 
     private final IVoidFunction onLevelLoad;
     private final Painter painter;
-    private final Logger levelAPI_logger = Logger.getLogger(this.getClass().getName());
-    private IGenerator gen;
 
     /**
      * Create a new {@link LevelSize} and register it at the game.
      *
-     * <p>The system will not load a new level at generation. Use {@link #loadLevel(LevelSize,
-     * DesignLabel)} if you want to trigger the load of a level manually, otherwise the first level
-     * will be loaded if this system {@link #execute()} is executed.
+     * <p>The system will not load a new level at generation. The first level will be loaded if this
+     * system {@link #execute()} is executed.
      *
      * @param painter The {@link Painter} to use to draw the level.
-     * @param generator Level generator to use to generate level.
      * @param onLevelLoad Callback-function that is called if a new level was loaded.
      */
-    public LevelSystem(Painter painter, IGenerator generator, IVoidFunction onLevelLoad) {
+    public LevelSystem(Painter painter, IVoidFunction onLevelLoad) {
         super(PlayerComponent.class, PositionComponent.class);
-        this.gen = generator;
         this.onLevelLoad = onLevelLoad;
         this.painter = painter;
     }
@@ -102,78 +86,17 @@ public final class LevelSystem extends System {
     }
 
     /**
-     * Get the configuration size that is set to generate the next level.
-     *
-     * @return Size of the next levels that are generated.
-     */
-    public static LevelSize levelSize() {
-        return levelSize;
-    }
-
-    /**
-     * Set the configuration size that is used to generate the next level.
-     *
-     * @param levelSize The new configuration size for level generation.
-     */
-    public static void levelSize(LevelSize levelSize) {
-        LevelSystem.levelSize = levelSize;
-    }
-
-    /**
-     * Set the current level to the given level.
-     *
-     * <p>Will trigger the onLevelLoad callback.
-     *
-     * @param level The level to be set.
-     */
-    public void loadLevel(ILevel level) {
-        currentLevel = level;
-        onLevelLoad.execute();
-    }
-
-    /**
-     * Load a new level.
-     *
-     * <p>Will trigger the onLevelLoad callback.
-     *
-     * @param size The wanted size of the new level.
-     * @param label The wanted design of the new level.
-     */
-    public void loadLevel(LevelSize size, DesignLabel label) {
-        currentLevel = gen.level(label, size);
-        onLevelLoad.execute();
-        levelAPI_logger.info("A new level was loaded.");
-    }
-
-    /**
-     * Load a new level with the configured size and the given design.
-     *
-     * <p>Will trigger the onLevelLoad callback.
-     *
-     * @param designLabel Wanted level design.
-     */
-    public void loadLevel(DesignLabel designLabel) {
-        loadLevel(levelSize, designLabel);
-    }
-
-    /**
-     * Load a new level with the given size and a random design. *
-     *
-     * <p>Will trigger the onLevelLoad callback.
-     *
-     * @param size Wanted size of the level.
-     */
-    public void loadLevel(LevelSize size) {
-        loadLevel(size, DesignLabel.randomDesign());
-    }
-
-    /**
      * Load a new level with the configured size and random design. *
      *
      * <p>Will trigger the onLevelLoad callback.
      */
     public void loadLevel() {
-        loadLevel(levelSize(), DesignLabel.randomDesign());
+        loadLevel(RoombasedLevelGenerator.level());
+    }
+
+    public void loadLevel(ILevel level) {
+        currentLevel = level;
+        onLevelLoad.execute();
     }
 
     private void drawLevel() {
@@ -193,24 +116,6 @@ public final class LevelSystem extends System {
                 }
             }
         }
-    }
-
-    /**
-     * Get the currently used level generator.
-     *
-     * @return The currently used level generator.
-     */
-    public IGenerator generator() {
-        return gen;
-    }
-
-    /**
-     * Set the level generator.
-     *
-     * @param generator The new level generator.
-     */
-    public void generator(IGenerator generator) {
-        gen = generator;
     }
 
     /**
@@ -266,8 +171,8 @@ public final class LevelSystem extends System {
      */
     @Override
     public void execute() {
-        if (currentLevel == null) loadLevel(levelSize);
-        else if (entityStream().anyMatch(this::isOnEndTile)) loadLevel(levelSize);
+        if (currentLevel == null) loadLevel();
+        else if (entityStream().anyMatch(this::isOnEndTile)) loadLevel();
         else
             entityStream()
                     .forEach(
