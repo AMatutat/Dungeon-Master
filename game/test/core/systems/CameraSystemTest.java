@@ -38,7 +38,7 @@ public class CameraSystemTest {
         Mockito.when(startTile.position()).thenReturn(testPoint);
         Mockito.when(level.randomTilePoint(Mockito.any())).thenReturn(testPoint);
         Mockito.when(level.startTile()).thenReturn(startTile);
-        Game.add(new LevelSystem(null, null, () -> {}));
+        Game.add(new LevelSystem(null, () -> {}));
     }
 
     @After

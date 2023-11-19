@@ -15,7 +15,6 @@ import core.configuration.KeyboardConfig;
 import core.hud.UITools;
 import core.level.Tile;
 import core.level.utils.Coordinate;
-import core.level.utils.LevelSize;
 import core.systems.CameraSystem;
 import core.utils.IVoidFunction;
 import core.utils.Point;
@@ -131,19 +130,6 @@ public class Debugger {
         }
     }
 
-    /**
-     * Toggles the level size between small, medium, and large. Changes will affect the next level
-     * load.
-     */
-    public static void TOGGLE_LEVEL_SIZE() {
-        switch (Game.levelSize()) {
-            case SMALL -> Game.levelSize(LevelSize.MEDIUM);
-            case MEDIUM -> Game.levelSize(LevelSize.LARGE);
-            case LARGE -> Game.levelSize(LevelSize.SMALL);
-        }
-        LOGGER.info("LevelSize toggled to: " + Game.levelSize());
-    }
-
     /** Spawns a monster at the cursor's position. */
     public static void SPAWN_MONSTER_ON_CURSOR() {
         LOGGER.info("Spawn Monster on Cursor");
@@ -225,8 +211,6 @@ public class Debugger {
             Debugger.TELEPORT_TO_START();
         if (Gdx.input.isKeyJustPressed(KeyboardConfig.DEBUG_TELEPORT_ON_END.value()))
             Debugger.LOAD_NEXT_LEVEL();
-        if (Gdx.input.isKeyJustPressed(KeyboardConfig.DEBUG_TOGGLE_LEVELSIZE.value()))
-            Debugger.TOGGLE_LEVEL_SIZE();
         if (Gdx.input.isKeyJustPressed(KeyboardConfig.DEBUG_SPAWN_MONSTER.value()))
             Debugger.SPAWN_MONSTER_ON_CURSOR();
         if (Gdx.input.isKeyJustPressed(KeyboardConfig.PAUSE.value())) Debugger.PAUSE_GAME();

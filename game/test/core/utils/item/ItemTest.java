@@ -10,7 +10,6 @@ import core.components.InventoryComponent;
 import core.components.PositionComponent;
 import core.item.Item;
 import core.level.TileLevel;
-import core.level.generator.IGenerator;
 import core.level.utils.DesignLabel;
 import core.level.utils.LevelElement;
 import core.systems.LevelSystem;
@@ -36,11 +35,7 @@ public class ItemTest {
     public void before() {
         Game.removeAllEntities();
 
-        Game.add(
-                new LevelSystem(
-                        Mockito.mock(Painter.class),
-                        Mockito.mock(IGenerator.class),
-                        Mockito.mock(IVoidFunction.class)));
+        Game.add(new LevelSystem(Mockito.mock(Painter.class), Mockito.mock(IVoidFunction.class)));
 
         Game.currentLevel(
                 new TileLevel(

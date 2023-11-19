@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import core.Game;
 import core.level.TileLevel;
-import core.level.generator.IGenerator;
 import core.systems.LevelSystem;
 import core.utils.IVoidFunction;
 import core.utils.Point;
@@ -26,11 +25,7 @@ public class LevelUtilsTest {
     // W W W W W
     @Before
     public void setup() {
-        Game.add(
-                new LevelSystem(
-                        Mockito.mock(Painter.class),
-                        Mockito.mock(IGenerator.class),
-                        Mockito.mock(IVoidFunction.class)));
+        Game.add(new LevelSystem(Mockito.mock(Painter.class), Mockito.mock(IVoidFunction.class)));
 
         Game.currentLevel(
                 new TileLevel(

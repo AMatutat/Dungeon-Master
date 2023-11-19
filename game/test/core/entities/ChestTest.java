@@ -104,7 +104,7 @@ public class ChestTest {
     }*/
     @Test
     public void checkGeneratorMethod() throws IOException {
-        Game.add(new LevelSystem(null, null, () -> {}));
+        Game.add(new LevelSystem(null, () -> {}));
 
         Game.currentLevel(
                 new TileLevel(
