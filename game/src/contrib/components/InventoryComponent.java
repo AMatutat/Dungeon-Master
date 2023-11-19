@@ -7,8 +7,6 @@ import contrib.item.Item;
 import core.Component;
 import core.utils.logging.CustomLogLevel;
 
-import dsl.semanticanalysis.types.DSLType;
-
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Set;
@@ -30,7 +28,6 @@ import java.util.stream.Collectors;
  *
  * <p>The number of items in the inventory can be retrieved using {@link #count()}.
  */
-@DSLType
 public final class InventoryComponent implements Component {
 
     private static final int DEFAULT_MAX_SIZE = 24;

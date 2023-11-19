@@ -3,10 +3,6 @@ package contrib.components;
 import core.Component;
 import core.Entity;
 
-import dsl.semanticanalysis.types.DSLCallback;
-import dsl.semanticanalysis.types.DSLType;
-import dsl.semanticanalysis.types.DSLTypeMember;
-
 import java.util.function.BiConsumer;
 
 /**
@@ -25,15 +21,14 @@ import java.util.function.BiConsumer;
  *
  * <p>The interaction radius can be queried with {@link #radius()}.
  */
-@DSLType
 public final class InteractionComponent implements Component {
     public static final int DEFAULT_INTERACTION_RADIUS = 5;
     public static final boolean DEFAULT_REPEATABLE = true;
 
     private static final BiConsumer<Entity, Entity> DEFAULT_INTERACTION = (entity, who) -> {};
-    @DSLTypeMember private final float radius;
+    private final float radius;
     private final boolean repeatable;
-    @DSLCallback private final BiConsumer<Entity, Entity> onInteraction;
+    private final BiConsumer<Entity, Entity> onInteraction;
 
     /**
      * Create a new {@link InteractionComponent}.

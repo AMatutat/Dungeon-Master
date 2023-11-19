@@ -2,9 +2,6 @@ package core;
 
 import core.game.ECSManagment;
 
-import dsl.semanticanalysis.types.DSLContextPush;
-import dsl.semanticanalysis.types.DSLType;
-
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -33,8 +30,6 @@ import java.util.stream.Stream;
  * @see System
  * @see Optional
  */
-@DSLType(name = "entity")
-@DSLContextPush(name = "entity")
 public final class Entity implements Comparable<Entity> {
     private static final Logger LOGGER = Logger.getLogger(Entity.class.getName());
     private static int nextId = 0;

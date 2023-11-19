@@ -4,9 +4,6 @@ import core.Component;
 import core.Entity;
 import core.utils.logging.CustomLogLevel;
 
-import dsl.semanticanalysis.types.DSLType;
-import dsl.semanticanalysis.types.DSLTypeMember;
-
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
@@ -28,15 +25,14 @@ import java.util.logging.Logger;
  * <p>Use {@link #yVelocity(float)} or {@link #xVelocity(float)} to change the current velocity.
  * Normally you want to use the {@link #xVelocity} or {@link #yVelocity} as parameter this.
  */
-@DSLType(name = "velocity_component")
 public final class VelocityComponent implements Component {
 
     private static final Consumer<Entity> DEFAULT_ON_WALL_HIT = e -> {};
     private final Logger LOGGER = Logger.getLogger(this.getClass().getName());
     private float currentXVelocity;
     private float currentYVelocity;
-    private @DSLTypeMember(name = "x_velocity") float xVelocity;
-    private @DSLTypeMember(name = "y_velocity") float yVelocity;
+    private float xVelocity;
+    private float yVelocity;
     private float previousXVelocity;
     private float previousYVelocity;
     private Consumer<Entity> onWallHit;

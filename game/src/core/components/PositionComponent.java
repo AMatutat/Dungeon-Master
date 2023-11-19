@@ -4,8 +4,6 @@ import core.Component;
 import core.level.Tile;
 import core.utils.Point;
 
-import dsl.semanticanalysis.types.DSLType;
-
 import java.util.logging.Logger;
 
 /**
@@ -19,7 +17,6 @@ import java.util.logging.Logger;
  *
  * @see Point
  */
-@DSLType(name = "position_component")
 public final class PositionComponent implements Component {
 
     public static final Point ILLEGAL_POSITION = new Point(-100, -100);
