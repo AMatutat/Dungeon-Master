@@ -3,20 +3,19 @@ package starter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 
-import contrib.components.InventoryComponent;
-import contrib.crafting.Crafting;
-import contrib.entities.EntityFactory;
-import contrib.item.concreteItem.ItemResourceIronOre;
-import contrib.item.concreteItem.ItemResourceWood;
-import contrib.level.generator.graphBased.RoombasedLevelGenerator;
-import contrib.systems.*;
-import contrib.utils.components.Debugger;
-
 import core.Entity;
 import core.Game;
+import core.components.InventoryComponent;
+import core.crafting.Crafting;
+import core.entities.EntityFactory;
+import core.item.concreteItem.ItemResourceIronOre;
+import core.item.concreteItem.ItemResourceWood;
 import core.level.elements.ILevel;
+import core.level.generator.graphBased.RoombasedLevelGenerator;
 import core.level.utils.DesignLabel;
 import core.level.utils.LevelSize;
+import core.systems.*;
+import core.utils.components.Debugger;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -102,10 +101,7 @@ public class Main {
     }
 
     private static void configGame() throws IOException {
-        Game.loadConfig(
-                "dungeon_config.json",
-                contrib.configuration.KeyboardConfig.class,
-                core.configuration.KeyboardConfig.class);
+        Game.loadConfig("dungeon_config.json", core.configuration.KeyboardConfig.class);
         Game.frameRate(30);
         Game.disableAudio(false);
         Game.windowTitle("My Dungeon");
