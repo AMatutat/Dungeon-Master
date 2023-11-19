@@ -3,6 +3,7 @@ package core.systems;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import core.Entity;
+import core.Game;
 import core.System;
 import core.components.DrawComponent;
 import core.components.PlayerComponent;
@@ -34,6 +35,8 @@ import java.util.stream.Collectors;
  * @see Animation
  */
 public final class DrawSystem extends System {
+
+    private static final int BLINK_CYCLUS_PER_SECOND = 8;
 
     /**
      * The batch is necessary to draw ALL the stuff. Every object that uses draw need to know the
@@ -85,8 +88,23 @@ public final class DrawSystem extends System {
         if (!configs.containsKey(currentAnimationTexture)) {
             configs.put(currentAnimationTexture, new PainterConfig(currentAnimationTexture));
         }
+        boolean blink = false;
+        int blinkFor = dsd.dc.blinkForFrames();
+        if (blinkFor > 0) {
+            if (dsd.dc.isBlinkingSince() >= 0)
+                if (dsd.dc.isBlinkingSince() < Game.frameRate() / BLINK_CYCLUS_PER_SECOND) {
+                    dsd.dc.isBlinkingSince(dsd.dc.isBlinkingSince() + 1);
+                    blink = true;
+                } else dsd.dc.isBlinkingSince(-Game.frameRate() / BLINK_CYCLUS_PER_SECOND);
+            else dsd.dc.isBlinkingSince(dsd.dc.isBlinkingSince() + 1);
+            dsd.dc.blinkForFrames(blinkFor - 1);
+        }
+
         painter.draw(
-                dsd.pc.position(), currentAnimationTexture, configs.get(currentAnimationTexture));
+                dsd.pc.position(),
+                currentAnimationTexture,
+                configs.get(currentAnimationTexture),
+                blink);
     }
 
     private void reduceFrameTimer(DrawComponent dc) {

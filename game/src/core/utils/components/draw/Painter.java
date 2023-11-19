@@ -15,7 +15,7 @@ public class Painter {
         this.batch = batch;
     }
 
-    public void draw(Point position, String texturePath, PainterConfig config) {
+    public void draw(Point position, String texturePath, PainterConfig config, boolean blink) {
         float realX = position.x + config.xOffset; // including the drawOffset
         float realY = position.y + config.yOffset; // including the drawOffset
         if (CameraSystem.isPointInFrustum(realX, realY)) {
@@ -25,6 +25,7 @@ public class Painter {
             // where to draw the sprite
             sprite.setPosition(realX, realY);
 
+            if (blink) sprite.setColor(1, 0, 0, 1); // Red color
             // need to be called before drawing
             batch.begin();
             // draw sprite
@@ -32,5 +33,9 @@ public class Painter {
             // need to be called after drawing
             batch.end();
         }
+    }
+
+    public void draw(Point position, String texturePath, PainterConfig config) {
+        draw(position, texturePath, config, false);
     }
 }
