@@ -105,6 +105,12 @@ public class EntityFactory {
                             Entity cameraDummy = new Entity();
                             cameraDummy.addComponent(cc);
                             cameraDummy.addComponent(poc);
+                            Game.hero(null);
+                            try {
+                                cameraDummy.addComponent(new DrawComponent("objects/skull"));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             Game.add(cameraDummy);
                         });
         hero.addComponent(hc);
