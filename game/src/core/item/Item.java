@@ -110,6 +110,7 @@ public class Item implements CraftingIngredient, CraftingResult {
         items.put(ItemSwordLightning.class.getSimpleName(), ItemSwordLightning.class);
         items.put(ItemSwordRainbow.class.getSimpleName(), ItemSwordRainbow.class);
         items.put(ItemSwordSnake.class.getSimpleName(), ItemSwordSnake.class);
+        items.put(ItemPotionHealthBig.class.getSimpleName(), ItemPotionHealthBig.class);
     }
 
     private String displayName;
