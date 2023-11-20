@@ -43,6 +43,17 @@ public class FireballSkill extends DamageProjectile {
                 PROJECTILE_RANGE);
     }
 
+    public FireballSkill(Supplier<Point> targetSelection, float speed, int dmg) {
+        super(
+                PROJECTILE_TEXTURES,
+                speed,
+                dmg,
+                DAMAGE_TYPE,
+                HITBOX_SIZE,
+                targetSelection,
+                PROJECTILE_RANGE);
+    }
+
     @Override
     protected void playSound() {
         Sound soundEffect = Gdx.audio.newSound(Gdx.files.internal(PROJECTILE_SOUND));
