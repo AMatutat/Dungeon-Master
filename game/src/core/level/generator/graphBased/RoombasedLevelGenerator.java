@@ -5,6 +5,7 @@ import core.Game;
 import core.components.DrawComponent;
 import core.components.PositionComponent;
 import core.entities.EntityFactory;
+import core.entities.MonsterFactory;
 import core.level.Tile;
 import core.level.TileLevel;
 import core.level.elements.ILevel;
@@ -14,34 +15,12 @@ import core.level.generator.graphBased.levelGraph.Direction;
 import core.level.generator.graphBased.levelGraph.LevelGraph;
 import core.level.generator.graphBased.levelGraph.LevelNode;
 import core.level.utils.*;
-import core.utils.IVoidFunction;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
-/**
- * This generator will use the {@link LevelGraphGenerator} and {@link RoomGenerator} to generate a
- * room-based level.
- *
- * <p>Use {@link #level(Set, DesignLabel)} to generate a level. For each Entity-Set, there will be
- * one Room in the level with the given entities.
- *
- * <p>Note that a Room-based Level has no {@link core.level.elements.tile.ExitTile}, so by default,
- * no new level will be loaded by the {@link core.systems.LevelSystem}.
- *
- * <p>Therefore, this Generator does not need to implement the {@link
- * core.level.generator.IGenerator} interface. This Generator also cannot be set as the
- * Level-Generator of the {@link core.systems.LevelSystem}.
- *
- * <p>To use a Room-based Level, use the {@link Game#userOnSetup(IVoidFunction)} method to set your
- * own setup method in your Main method. In your Setup-Method, generate a level by using the {@link
- * #level(Set, DesignLabel)} method and use {@link Game#currentLevel(ILevel)} to set the generated
- * level.
- *
- * <p>Now you can get a dot representation of the level graph in the log.
- */
 public class RoombasedLevelGenerator {
 
     /** Rooms with this amount or fewer entities will be generated small. */
@@ -65,7 +44,10 @@ public class RoombasedLevelGenerator {
             }
             for (int j = 0; j < 5; j++) {
                 try {
-                    set.add(EntityFactory.randomMonster());
+                    if (j < 3) set.add(MonsterFactory.randomMonster(MonsterFactory.Strength.EASY));
+                    else if (i == 3)
+                        set.add(MonsterFactory.randomMonster(MonsterFactory.Strength.MEDIUM));
+                    else set.add(MonsterFactory.randomMonster(MonsterFactory.Strength.HARD));
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

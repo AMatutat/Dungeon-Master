@@ -4,7 +4,7 @@ import core.Entity;
 import core.Game;
 import core.components.InventoryComponent;
 import core.components.PositionComponent;
-import core.entities.EntityFactory;
+import core.entities.MonsterFactory;
 import core.item.Item;
 import core.utils.components.draw.Animation;
 
@@ -26,7 +26,7 @@ public class ItemResourceEgg extends Item {
                         component -> {
                             component.remove(this);
                             try {
-                                Entity monster = EntityFactory.randomMonster();
+                                Entity monster = MonsterFactory.randomMonster();
                                 monster.fetch(PositionComponent.class)
                                         .orElseThrow()
                                         .position(
